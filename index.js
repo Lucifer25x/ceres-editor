@@ -19,6 +19,7 @@ ipcRenderer.on('newFile', (event, location) => {
     if (location.length != 0) {
         localStorage.setItem('folder', location);
         document.querySelector('.newFile').classList.add('visible')
+        document.getElementById('filename').focus();
     } else {
         alert('Please select location for new file.')
     }
@@ -32,14 +33,18 @@ ipcRenderer.on('save', (event) => {
     }
 })
 
-document.getElementById('nw').addEventListener('submit', (e)=>{
+document.getElementById('nw').addEventListener('submit', (e) => {
     e.preventDefault();
-    if(localStorage.getItem('folder') != null){
-        if(document.getElementById('filename').value.length > 1){
-            document.querySelector('.newFile').classList.remove('visible');
-            fs.writeFileSync(path.join(localStorage.getItem('folder'), document.getElementById('filename').value), ' ');
-            localStorage.setItem('file', localStorage.getItem('folder')+document.getElementById('filename').value);
-            editor.setValue(' ')
+    if (localStorage.getItem('folder') != null) {
+        if (document.getElementById('filename').value.length > 1) {
+            if (fs.existsSync(path.join(localStorage.getItem('folder'), document.getElementById('filename').value))){
+                alert('File exists. Please change location or file name.')
+            } else {
+                document.querySelector('.newFile').classList.remove('visible');
+                fs.writeFileSync(path.join(localStorage.getItem('folder'), document.getElementById('filename').value), ' ');
+                localStorage.setItem('file', path.join(localStorage.getItem('folder'), document.getElementById('filename').value));
+                editor.setValue(' ')
+            }
         } else {
             alert('You should write valid file name.')
         }
@@ -50,6 +55,10 @@ document.getElementById('nw').addEventListener('submit', (e)=>{
 
 window.addEventListener('load', () => {
     if (localStorage.getItem('file') != null) {
-        editor.setValue(fs.readFileSync(localStorage.getItem('file'), 'utf-8'))
+        if(fs.existsSync(localStorage.getItem('file'))){
+            editor.setValue(fs.readFileSync(localStorage.getItem('file'), 'utf-8'));
+        } else {
+            editor.setValue('');
+        }
     }
 })
