@@ -8,10 +8,11 @@ function createWindow() {
         width: 800,
         height: 600,
         title: 'Text Editor',
+        icon: 'icon.png',
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
-            devTools: true
+            devTools: false
         }
     })
 
@@ -22,11 +23,22 @@ function createWindow() {
             label: 'File',
             submenu: [
                 {
+                    label: 'New File',
+                    accelerator: 'Ctrl+N',
+                    click: async () => {
+                        const { filePaths } = await dialog.showOpenDialog(
+                            { properties: ['openDirectory'] }
+                        )
+                        const location = filePaths[0];
+                        mainWindow.webContents.send('newFile', location)
+                    }
+                },
+                {
                     label: 'Open File',
                     accelerator: 'Ctrl+O',
                     click: async () => {
                         const { filePaths } = await dialog.showOpenDialog(
-                            { properties: ['openFile']}
+                            { properties: ['openFile'] }
                         );
                         const location = filePaths[0];
                         mainWindow.webContents.send('file', location)
@@ -36,14 +48,13 @@ function createWindow() {
                 {
                     label: 'Save File',
                     accelerator: 'Ctrl+S',
-                    click: ()=>{
+                    click: () => {
                         mainWindow.webContents.send('save')
                     }
                 }
             ]
         },
         { role: 'editMenu' },
-        { role: 'viewMenu' },
         { role: 'windowMenu' }
     ]
 
