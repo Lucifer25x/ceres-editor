@@ -1,9 +1,10 @@
-const { app, BrowserWindow, Menu, dialog } = require('electron');
+const { app, BrowserWindow, Menu, dialog, ipcMain } = require('electron');
 const path = require('path');
 
 let mainWindow;
 
 function createWindow() {
+    // Create new BrowserWindow
     mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
@@ -12,12 +13,14 @@ function createWindow() {
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
-            devTools: false
+            devTools: true
         }
     })
 
+    // Load file
     mainWindow.loadFile(path.join(__dirname, 'index.html'))
 
+    // Menu Template
     const template = [
         {
             label: 'File',
@@ -26,11 +29,18 @@ function createWindow() {
                     label: 'New File',
                     accelerator: 'Ctrl+N',
                     click: async () => {
-                        const { filePaths } = await dialog.showOpenDialog(
-                            { properties: ['openDirectory'] }
+                        mainWindow.webContents.send('newFile')
+                    }
+                },
+                {
+                    label: 'Open Folder',
+                    accelerator: 'Ctrl+Shift+O',
+                    click: async ()=>{
+                        const {filePaths} = await dialog.showOpenDialog(
+                            {properties: ['openDirectory']}
                         )
                         const location = filePaths[0];
-                        mainWindow.webContents.send('newFile', location)
+                        mainWindow.webContents.send('openFolder', location)
                     }
                 },
                 {
@@ -55,13 +65,20 @@ function createWindow() {
             ]
         },
         { role: 'editMenu' },
-        { role: 'windowMenu' }
+        { role: 'windowMenu' },
+        { role: 'viewMenu' }
     ]
 
+    // Create custom Menu
     const menu = Menu.buildFromTemplate(template)
     Menu.setApplicationMenu(menu)
+
+    ipcMain.on('reload', ()=>{
+        mainWindow.webContents.reload();
+    })
 }
 
+// Create window
 app.whenReady().then(() => {
     createWindow();
 }).catch(err => console.log(err))

@@ -2,9 +2,11 @@
 
 ## Functions: 
 * Open File
+* Open Folder
 * Edit File
 * Save File
 * Create New File
+* Get location of files and folders
 
 ## Packages:
 * Electron.js
