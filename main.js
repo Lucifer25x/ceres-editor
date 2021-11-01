@@ -28,8 +28,15 @@ function createWindow() {
                 {
                     label: 'New File',
                     accelerator: 'Ctrl+N',
-                    click: async () => {
+                    click: () => {
                         mainWindow.webContents.send('newFile')
+                    }
+                },
+                {
+                    label: 'New Folder',
+                    accelerator: 'Ctrl+Shift+N',
+                    click: () => {
+                        mainWindow.webContents.send('newFolder')
                     }
                 },
                 {

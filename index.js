@@ -61,10 +61,26 @@ ipcRenderer.on('file', (event, location) => {
 // Add visible class to new file form
 ipcRenderer.on('newFile', (event) => {
     if (localStorage.getItem('folder') != null) {
+        if (document.querySelector('.newFolder').classList.contains('visible')) {
+            document.querySelector('.newFolder').classList.remove('visible')
+        }
         document.querySelector('.newFile').classList.add('visible')
         document.getElementById('filename').focus();
     } else {
         alert('Please open any folder for creating new file.')
+    }
+})
+
+// Add visible class to new folder form
+ipcRenderer.on('newFolder', (event) => {
+    if (localStorage.getItem('folder') != null) {
+        if (document.querySelector('.newFile').classList.contains('visible')) {
+            document.querySelector('.newFile').classList.remove('visible')
+        }
+        document.querySelector('.newFolder').classList.add('visible')
+        document.getElementById('foldername').focus();
+    } else {
+        alert('Please open any folder for creating new folder.')
     }
 })
 
@@ -93,16 +109,48 @@ document.getElementById('nw').addEventListener('submit', (e) => {
                 alert('File exists. Please change location or file name.')
             } else {
                 document.querySelector('.newFile').classList.remove('visible');
-                fs.writeFileSync(path.join(localStorage.getItem('folder'), document.getElementById('filename').value), ' ');
-                localStorage.setItem('file', path.join(localStorage.getItem('folder'), document.getElementById('filename').value));
-                editor.setValue(' ')
-                ipcRenderer.send('reload')
+                try {
+                    fs.writeFileSync(path.join(localStorage.getItem('folder'), document.getElementById('filename').value), ' ');
+                    localStorage.setItem('file', path.join(localStorage.getItem('folder'), document.getElementById('filename').value));
+                    editor.setValue(' ')
+                    ipcRenderer.send('reload')
+                } catch (err) {
+                    alert("Error!");
+                    console.log(err)
+                }
             }
         } else {
             alert('You should write valid file name.')
         }
     } else {
         alert('You should select location for file.')
+    }
+})
+// Create new folder
+document.getElementById('nwFolder').addEventListener('submit', (e) => {
+    e.preventDefault();
+    // Check folder is empty or not
+    if (localStorage.getItem('folder') != null) {
+        // Check filename length
+        if (document.getElementById('foldername').value.length > 1) {
+            // Check file is exists or not
+            if (fs.existsSync(path.join(localStorage.getItem('folder'), document.getElementById('foldername').value))) {
+                alert('Folder exists. Please change location or folder name.')
+            } else {
+                document.querySelector('.newFolder').classList.remove('visible');
+                try {
+                    fs.mkdirSync(path.join(localStorage.getItem('folder'), document.getElementById('foldername').value))
+                    ipcRenderer.send('reload')
+                } catch (err) {
+                    alert("Error!");
+                    console.log(err);
+                }
+            }
+        } else {
+            alert('You should write valid folder name.')
+        }
+    } else {
+        alert('You should select location for folder.')
     }
 })
 
