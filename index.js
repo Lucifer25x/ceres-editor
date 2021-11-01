@@ -31,7 +31,7 @@ function openFolder(location) {
                     const cont = fs.readFileSync(path.join(location, content[i]), 'utf-8');
                     editor.setValue(cont);
                 })
-                li.title = path.join(location,content[i])
+                li.title = path.join(location, content[i])
             } else {
                 const li = document.createElement('li');
                 const el = `<img src="./folder.png" alt="folder" id="icon"><span id="name">${content[i]}</span>`;
@@ -42,7 +42,7 @@ function openFolder(location) {
                     localStorage.setItem('folder', path.join(location, content[i]))
                     openFolder(path.join(location, content[i]));
                 })
-                li.title = path.join(location,content[i])
+                li.title = path.join(location, content[i])
             }
         }
     } else {
