@@ -1,5 +1,6 @@
 const { app, BrowserWindow, Menu, dialog, ipcMain } = require('electron');
 const path = require('path');
+const isDev = require('electron-is-dev');
 
 let mainWindow;
 
@@ -13,7 +14,7 @@ function createWindow() {
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
-            devTools: true
+            devTools: isDev
         }
     })
 
@@ -73,8 +74,11 @@ function createWindow() {
         },
         { role: 'editMenu' },
         { role: 'windowMenu' },
-        { role: 'viewMenu' }
     ]
+
+    if(isDev){
+        template.push({ role: 'viewMenu'})
+    }
 
     // Create custom Menu
     const menu = Menu.buildFromTemplate(template)
