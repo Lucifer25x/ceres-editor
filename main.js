@@ -69,6 +69,13 @@ function createWindow() {
                     click: () => {
                         mainWindow.webContents.send('save')
                     }
+                },
+                {
+                    label: 'Sidebar',
+                    accelerator: 'Ctrl+Shift+B',
+                    click: () => {
+                        mainWindow.webContents.send('sidebar')
+                    }
                 }
             ]
         },
