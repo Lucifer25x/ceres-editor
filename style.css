@@ -27,6 +27,12 @@ body {
     font-family: 'Poppins', sans-serif;
     font-weight: 400;
 }
+.left.unvisible {
+    display: none;
+}
+.left.unvisible ~ #editor {
+    width: 100%;
+}
 #editor {
     width: 80%;
     height: 100%;
