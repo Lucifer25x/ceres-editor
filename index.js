@@ -58,6 +58,11 @@ ipcRenderer.on('file', (event, location) => {
     }
 })
 
+// Toggle Sidebar 
+ipcRenderer.on('sidebar', ()=>{
+    document.querySelector('.left').classList.toggle('unvisible');
+})
+
 // Add visible class to new file form
 ipcRenderer.on('newFile', (event) => {
     if (localStorage.getItem('folder') != null) {
