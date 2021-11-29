@@ -4,24 +4,7 @@ const isDev = require('electron-is-dev');
 
 let mainWindow;
 
-function createWindow() {
-    // Create new BrowserWindow
-    mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
-        title: 'Text Editor',
-        icon: 'icon.png',
-        webPreferences: {
-            nodeIntegration: true,
-            contextIsolation: false,
-            devTools: isDev
-        }
-    })
-
-    // Load file
-    mainWindow.loadFile(path.join(__dirname, 'index.html'))
-
-    // Menu Template
+ // Menu Template
     const template = [
         {
             label: 'File',
@@ -83,6 +66,24 @@ function createWindow() {
         { role: 'windowMenu' },
     ]
 
+
+function createWindow() {
+    // Create new BrowserWindow
+    mainWindow = new BrowserWindow({
+        width: 800,
+        height: 600,
+        title: 'Text Editor',
+        icon: 'icon.png',
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false,
+            devTools: isDev
+        }
+    })
+
+    // Load file
+    mainWindow.loadFile(path.join(__dirname, 'index.html'))
+    
     if(isDev){
         template.push({ role: 'viewMenu'})
     }
@@ -90,11 +91,11 @@ function createWindow() {
     // Create custom Menu
     const menu = Menu.buildFromTemplate(template)
     Menu.setApplicationMenu(menu)
-
-    ipcMain.on('reload', ()=>{
-        mainWindow.webContents.reload();
-    })
 }
+
+ipcMain.on('reload', ()=>{
+    mainWindow.webContents.reload();
+})
 
 // Create window
 app.whenReady().then(() => {
