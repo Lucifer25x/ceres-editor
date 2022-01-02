@@ -11,7 +11,7 @@ editor.setOptions({
 // Open Folder
 function openFolder(location) {
     // Check user is selected any location or not
-    var folderName = location.replace(/^.*[\\\/]/, '')
+    var folderName = location.replace(/([^\/]*)\/*$/, '')
     document.getElementById('flname').textContent = folderName;
     document.querySelector('.flname').title = location;
     if (location.length != 0) {
