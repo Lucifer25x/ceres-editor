@@ -64,7 +64,7 @@ ipcRenderer.on('sidebar', ()=>{
 })
 
 // Add visible class to new file form
-ipcRenderer.on('newFile', (event) => {
+ipcRenderer.on('newFile', () => {
     if (localStorage.getItem('folder') != null) {
         if (document.querySelector('.newFolder').classList.contains('visible')) {
             document.querySelector('.newFolder').classList.remove('visible')
@@ -77,7 +77,7 @@ ipcRenderer.on('newFile', (event) => {
 })
 
 // Add visible class to new folder form
-ipcRenderer.on('newFolder', (event) => {
+ipcRenderer.on('newFolder', () => {
     if (localStorage.getItem('folder') != null) {
         if (document.querySelector('.newFile').classList.contains('visible')) {
             document.querySelector('.newFile').classList.remove('visible')
@@ -94,7 +94,7 @@ ipcRenderer.on('openFolder', (event, location) => {
 })
 
 // Save File
-ipcRenderer.on('save', (event) => {
+ipcRenderer.on('save', () => {
     if (localStorage.getItem('file') != null) {
         fs.writeFileSync(localStorage.getItem('file'), editor.getValue());
     } else {
