@@ -13,6 +13,7 @@
 * Create New Folder
 * Get location of files and folders
 * Make Window title with file path
+* Toggle Sidebar
 
 ## Packages:
 * Electron.js
