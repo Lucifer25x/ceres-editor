@@ -8,6 +8,12 @@ editor.setOptions({
     fontSize: '16px'
 })
 
+window.ondblclick = () => {
+    if (document.querySelector('.context-menu').classList.contains('visible')) {
+        document.querySelector('.context-menu').classList.remove('visible');
+    }
+}
+
 // Open Folder
 function openFolder(location) {
     // Check user is selected any location or not
@@ -30,6 +36,38 @@ function openFolder(location) {
                     localStorage.setItem('file', path.join(location, content[i]));
                     const cont = fs.readFileSync(path.join(location, content[i]), 'utf-8');
                     editor.setValue(cont);
+                    ipcRenderer.send('setWindowTitle', path.join(location, content[i]) + ' - Text Editor');
+                })
+                li.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
+                    document.querySelector('.context-menu').classList.add('visible');
+                    document.querySelector('.context-menu').style.top = e.clientY + 'px';
+                    document.querySelector('.context-menu').style.left = e.clientX + 'px';
+
+                    document.getElementById('rename').addEventListener('click', () => {
+                        document.querySelector('.rename').classList.add('visible');
+                        document.querySelector('.context-menu').classList.remove('visible');
+                    })
+
+                    document.getElementById('delete').addEventListener('click', () => {
+                        if (confirm('Are you sure to delete this file?')) {
+                            fs.unlinkSync(path.join(location, content[i]));
+                            localStorage.removeItem('file');
+                        }
+                        document.querySelector('.context-menu').classList.remove('visible');
+                        ipcRenderer.send('reload')
+                    })
+
+                    document.getElementById("newName").addEventListener('submit', (e) => {
+                        e.preventDefault();
+                        const newName = document.getElementById('newfilename').value;
+                        if (newName.length != 0) {
+                            fs.renameSync(path.join(location, content[i]), path.join(location, newName));
+                            localStorage.setItem('file', path.join(location, newName));
+                            document.querySelector('.rename').classList.remove('visible');
+                        }
+                        ipcRenderer.send('reload')
+                    })
                 })
                 li.title = path.join(location, content[i])
             } else {
@@ -41,6 +79,35 @@ function openFolder(location) {
                     // Open folder again
                     localStorage.setItem('folder', path.join(location, content[i]))
                     openFolder(path.join(location, content[i]));
+                })
+                li.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
+                    document.querySelector('.context-menu').classList.add('visible');
+                    document.querySelector('.context-menu').style.top = e.clientY + 'px';
+                    document.querySelector('.context-menu').style.left = e.clientX + 'px';
+
+                    document.getElementById('rename').addEventListener('click', () => {
+                        document.querySelector('.rename').classList.add('visible');
+                        document.querySelector('.context-menu').classList.remove('visible');
+                    })
+
+                    document.getElementById('delete').addEventListener('click', () => {
+                        if (confirm('Are you sure to delete this folder?')) {
+                            fs.rmdirSync(path.join(location, content[i]));
+                        }
+                        document.querySelector('.context-menu').classList.remove('visible');
+                        ipcRenderer.send('reload')
+                    })
+
+                    document.getElementById("newName").addEventListener('submit', (e) => {
+                        e.preventDefault();
+                        const newName = document.getElementById('newfilename').value;
+                        if (newName.length != 0) {
+                            fs.renameSync(path.join(location, content[i]), path.join(location, newName));
+                            document.querySelector('.rename').classList.remove('visible');
+                        }
+                        ipcRenderer.send('reload')
+                    })
                 })
                 li.title = path.join(location, content[i])
             }
@@ -59,7 +126,7 @@ ipcRenderer.on('file', (event, location) => {
 })
 
 // Toggle Sidebar 
-ipcRenderer.on('sidebar', ()=>{
+ipcRenderer.on('sidebar', () => {
     document.querySelector('.left').classList.toggle('unvisible');
 })
 
@@ -164,6 +231,7 @@ window.addEventListener('load', () => {
     if (localStorage.getItem('file') != null) {
         if (fs.existsSync(localStorage.getItem('file'))) {
             editor.setValue(fs.readFileSync(localStorage.getItem('file'), 'utf-8'));
+            ipcRenderer.send('setWindowTitle', localStorage.getItem('file') + ' - Text Editor');
         } else {
             editor.setValue('');
         }
