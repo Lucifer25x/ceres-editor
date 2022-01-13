@@ -1,6 +1,6 @@
 {
-  "name": "editor",
-  "version": "1.0.0",
+  "name": "text-editor",
+  "version": "1.0.1",
   "description": "",
   "main": "main.js",
   "scripts": {
