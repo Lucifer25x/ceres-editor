@@ -73,7 +73,7 @@ function openFolder(location) {
             } else {
                 const li = document.createElement('li');
                 const el = `<img src="./folder.png" alt="folder" id="icon"><span id="name">${content[i]}</span>`;
-                li.innerHTML = el;
+                li.innerText = el;
                 parent.appendChild(li);
                 li.addEventListener('click', () => {
                     // Open folder again
