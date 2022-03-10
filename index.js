@@ -30,7 +30,7 @@ function openFolder(location) {
             if (fs.lstatSync(path.join(location, content[i])).isFile()) {
                 const li = document.createElement('li');
                 const el = `<img src="./file.png" alt="file" id="icon"><span id="name">${content[i]}</span>`;
-                li.innerHTML = el;
+                li.textContent = el;
                 parent.appendChild(li);
                 li.addEventListener('click', () => {
                     localStorage.setItem('file', path.join(location, content[i]));
@@ -73,7 +73,7 @@ function openFolder(location) {
             } else {
                 const li = document.createElement('li');
                 const el = `<img src="./folder.png" alt="folder" id="icon"><span id="name">${content[i]}</span>`;
-                li.innerHTML = el;
+                li.textContent = el;
                 parent.appendChild(li);
                 li.addEventListener('click', () => {
                     // Open folder again
