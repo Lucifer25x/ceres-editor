@@ -1,13 +1,13 @@
 {
-  "name": "text-editor",
+  "name": "zaman-text-editor",
   "version": "1.0.1",
-  "description": "",
+  "description": "Electron JS text - editor",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
   },
   "keywords": [],
-  "author": "",
+  "author": "Tauseed Zaman",
   "license": "ISC",
   "devDependencies": {
     "electron": "^15.3.0",

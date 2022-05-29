@@ -1,5 +1,8 @@
-<h1><img width=50 src="./icon.png" alt="icon"/> Simple Text Editor using Electron.js</h1>
+<h1><img width=50 src="./icons/icon.png" alt="icon"/> Simple Text Editor using Electron.js</h1>
 
+<img src="./Screenshot.png" width="100%"/>
+
+<br/>
 <img src="./screenshot.png" width=500/>
 
 ## Functions: 
