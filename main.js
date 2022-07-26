@@ -76,7 +76,6 @@ function createWindow() {
         minWidth: 800,
         minHeight: 600,
         title: 'Text Editor',
-        icon: './icons/icon.png',
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
