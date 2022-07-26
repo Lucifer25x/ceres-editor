@@ -1,7 +1,7 @@
 <h1>Simple Text Editor using Electron.js</h1>
 
 <br/>
-<img src="./screenshot.png" width=500/>
+<img src="./Screenshot.png" width=500/>
 
 ## Functions: 
 * Open File
