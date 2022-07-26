@@ -31,44 +31,7 @@ function openFolder(location) {
             // Check path is file or not
             if (fs.lstatSync(path.join(location, content[i])).isFile()) {
                 const li = document.createElement('li');
-                var fileExtension = (content[i]).split('.').pop();
-                var el;
-                console.log(fileExtension)
-                if (fileExtension == "js") {
-                    el = `<img src="./icons/java-scrip.png" alt="js file" id="icon"><span id="name">${content[i]}</span>`;
-                } else if (fileExtension == "pdf") {
-                    el = `<img src="./icons/Adobe-PDF-Document-icon.png" alt="js file" id="icon"><span id="name">${content[i]}</span>`;
-                } else if (fileExtension == "dll") {
-                    el = `<img src="./icons/dll-icon.png" alt="" id="icon"><span id="name">${content[i]}</span>`;
-                } else if (fileExtension == "svg") {
-                    el = `<img src="./icons/File-Adobe-Illustrator-SVG-01-icon.png" alt="" id="icon"><span id="name">${content[i]}</span>`;
-                } else if (fileExtension == "cpp") {
-                    el = `<img src="./icons/Files-Cpp-icon.png" alt="" id="icon"><span id="name">${content[i]}</span>`;
-                } else if (fileExtension == "cs") {
-                    el = `<img src="./icons/Files-Cs-icon.png" alt="" id="icon"><span id="name">${content[i]}</span>`;
-                } else if (fileExtension == "csv") {
-                    el = `<img src="./icons/Files-Csv-icon.png" alt="" id="icon"><span id="name">${content[i]}</span>`;
-                } else if (fileExtension == "sql") {
-                    el = `<img src="./icons/Files-Sql-icon.png" alt="" id="icon"><span id="name">${content[i]}</span>`;
-                } else if (fileExtension == "log") {
-                    el = `<img src="./icons/log-icon.png" alt="" id="icon"><span id="name">${content[i]}</span>`;
-                } else if (fileExtension == "html") {
-                    el = `<img src="./icons/html5.png" alt="text file" id="icon"><span id="name">${content[i]}</span>`;
-                } else if (fileExtension == "css") {
-                    el = `<img src="./icons/css3.png" alt="text file" id="icon"><span id="name">${content[i]}</span>`;
-                } else if (fileExtension == "json") {
-                    el = `<img src="./icons/app-json-icon.png" alt="text file" id="icon"><span id="name">${content[i]}</span>`;
-                } else if (fileExtension == "md") {
-                    el = `<img src="./icons/text-x-markdown-icon.png" alt="text file" id="icon"><span id="name">${content[i]}</span>`;
-                } else if (fileExtension == "yml") {
-                    el = `<img src="./icons/app-x-yaml-icon.png" alt="text file" id="icon"><span id="name">${content[i]}</span>`;
-                } else if (fileExtension == "php") {
-                    el = `<img src="./icons/Elephant-icon.png" alt="text file" id="icon"><span id="name">${content[i]}</span>`;
-                } else if (fileExtension == "env") {
-                    el = `<img src="./icons/Document-Write-icon.png" alt="text file" id="icon"><span id="name">${content[i]}</span>`;
-                } else {
-                    el = `<img src="./icons/text.png" alt="js file" id="icon"><span id="name">${content[i]}</span>`;
-                }
+                const el = `<img src="./file.png" alt="file" id="icon"><span id="name">${content[i]}</span>`;
                 li.innerHTML = el;
                 parent.appendChild(li);
                 li.addEventListener('click', () => {
