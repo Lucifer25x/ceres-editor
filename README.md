@@ -1,4 +1,4 @@
-<h1><img width=50 src="./icons/icon.png" alt="icon"/> Simple Text Editor using Electron.js</h1>
+<h1>Simple Text Editor using Electron.js</h1>
 
 <br/>
 <img src="./screenshot.png" width=500/>
