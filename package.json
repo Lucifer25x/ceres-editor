@@ -1,8 +1,8 @@
 {
   "name": "simple-text-editor",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Simple Text Editor JS",
-  "main": "main.js",
+  "main": "src/main.js",
   "scripts": {
     "start": "electron ."
   },

@@ -21,7 +21,7 @@ body {
   position: relative;
   display: flex;
   flex-direction: column;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.7);
   border-right: 2px black solid;
   user-select: none;
   font-family: "Poppins", sans-serif;
@@ -48,7 +48,7 @@ body {
   align-items: center;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.7);
-  border: 1px solid black;
+  border-bottom: 1px solid rgb(184, 182, 182);
 }
 .flname h2 {
   margin-left: 1em;
@@ -64,9 +64,9 @@ body {
 }
 .content ul li {
   width: 100%;
-  padding-top: 0.2em;
-  padding-bottom: 0.2em;
-  border: 1px solid black;
+  padding: .5em 0;
+  background-color: rgba(0,0,0,.7);
+  border-bottom: 1px solid white;
   display: flex;
   list-style: none;
   align-items: center;

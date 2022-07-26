@@ -1,11 +1,9 @@
-const {
-    ipcRenderer
-} = require('electron');
+const { ipcRenderer } = require('electron');
 const fs = require('fs');
 const path = require('path');
 
 var editor = ace.edit("editor");
-editor.setTheme("ace/theme/monokai");
+editor.setTheme("ace/theme/dracula");
 editor.setOptions({
     fontSize: '16px'
 })
@@ -31,7 +29,7 @@ function openFolder(location) {
             // Check path is file or not
             if (fs.lstatSync(path.join(location, content[i])).isFile()) {
                 const li = document.createElement('li');
-                const el = `<img src="./file.png" alt="file" id="icon"><span id="name">${content[i]}</span>`;
+                const el = `<img src="../icons/file.png" alt="file" id="icon"><span id="name">${content[i]}</span>`;
                 li.innerHTML = el;
                 parent.appendChild(li);
                 li.addEventListener('click', () => {
@@ -74,7 +72,7 @@ function openFolder(location) {
                 li.title = path.join(location, content[i])
             } else {
                 const li = document.createElement('li');
-                const el = `<img src="./icons/folder.png" alt="folder" id="icon"><span id="name">${content[i]}</span>`;
+                const el = `<img src="../icons/folder.png" alt="folder" id="icon"><span id="name">${content[i]}</span>`;
                 li.innerHTML = el;
                 parent.appendChild(li);
                 li.addEventListener('click', () => {

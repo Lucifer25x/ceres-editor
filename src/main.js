@@ -76,6 +76,7 @@ function createWindow() {
         minWidth: 800,
         minHeight: 600,
         title: 'Text Editor',
+        icon: 'icons/icon.png',
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
@@ -84,7 +85,7 @@ function createWindow() {
     })
 
     // Load file
-    mainWindow.loadFile(path.join(__dirname, 'index.html'))
+    mainWindow.loadFile('public/index.html');
 
     if (isDev) {
         template.push({ role: 'viewMenu' })
