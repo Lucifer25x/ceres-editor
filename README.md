@@ -19,4 +19,4 @@
 * Electron.js
 * Node-fs
 * Node-path
-* Ace.js
+* Ace.js (brace)
