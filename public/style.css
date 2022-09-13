@@ -1,11 +1,16 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;1,200&display=swap");
 
+:root {
+  --background: #1c1d25;
+  --left-border: #22222e;
+  --folder-name-color: rgba(255, 255, 255, 0.7);
+  --el-hover: rgba(200, 200, 200, 0.1);
+  --el-name-color: blanchedalmond;
+}
+
 * {
   margin: 0;
   padding: 0;
-}
-body {
-  background-color: rgba(0, 0, 0, 0.8);
 }
 
 .main {
@@ -21,8 +26,8 @@ body {
   position: relative;
   display: flex;
   flex-direction: column;
-  background-color: rgba(0, 0, 0, 0.7);
-  border-right: 2px black solid;
+  background-color: var(--background);
+  border-right: 2px var(--left-border) solid;
   user-select: none;
   font-family: "Poppins", sans-serif;
   font-weight: 400;
@@ -47,8 +52,8 @@ body {
   display: flex;
   align-items: center;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.7);
-  border-bottom: 1px solid rgb(184, 182, 182);
+  color: var(--folder-name-color);
+  /* border-bottom: 1px solid rgb(184, 182, 182); */
 }
 .flname h2 {
   margin-left: 1em;
@@ -65,20 +70,43 @@ body {
 .content ul li {
   width: 100%;
   padding: .5em 0;
-  background-color: rgba(0,0,0,.7);
-  border-bottom: 1px solid white;
   display: flex;
   list-style: none;
   align-items: center;
-  color: blanchedalmond;
+  color: var(--el-name-color);
   cursor: pointer;
 }
 .content ul li:hover {
-  background-color: rgba(200, 200, 200, 0.1);
+  background-color: var(--el-hover);
 }
 .content ul li img,
 .content ul li span {
   margin-left: 0.5em;
+}
+
+/* New File, New Folder */
+.inputDialog {
+  width: 200px;
+  height: 30px;
+  position: fixed;
+  top: 1.5em;
+  left: 50%;
+  transform: translateX(-50%);
+  display: none;
+}
+.inputDialog.visible {
+  display: block;
+}
+#input {
+  width: 200px;
+  padding: 0.3em 1em;
+  height: 30px;
+  border: 1px solid black;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+#input:focus {
+  outline: none;
 }
 
 .newFile {
@@ -127,62 +155,6 @@ body {
 }
 #foldername:focus {
   outline: none;
-}
-
-.context-menu {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 200px;
-  padding: 0.3em;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  z-index: 100;
-  font-family: "Poppins", sans-serif;
-  font-weight: 400;
-  border-radius: 5px;
-}
-.context-menu.visible {
-  display: flex;
-}
-.context-menu ul {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  overflow-x: hidden;
-}
-.context-menu ul li {
-  width: 100%;
-  padding-top: 0.2em;
-  padding-bottom: 0.2em;
-  border: 1px solid black;
-  display: flex;
-  list-style: none;
-  align-items: center;
-  color: blanchedalmond;
-  cursor: pointer;
-}
-.context-menu ul li:hover {
-  background-color: rgba(200, 200, 200, 0.1);
-}
-
-.rename {
-  width: 200px;
-  height: 30px;
-  position: fixed;
-  top: 1.5em;
-  left: 50%;
-  transform: translateX(-50%);
-  display: none;
-}
-
-.rename.visible {
-  display: block;
 }
 
 #newfilename {

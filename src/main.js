@@ -1,6 +1,13 @@
 const { app, BrowserWindow, Menu, dialog, ipcMain } = require('electron');
-const path = require('path');
 const isDev = require('electron-is-dev');
+const keybindings = require('../config/keybindings.json');
+
+const win = {
+    width: 1000,
+    height: 800,
+    minWidth: 1000,
+    minHeight: 600
+}
 
 let mainWindow;
 
@@ -11,21 +18,21 @@ const template = [
         submenu: [
             {
                 label: 'New File',
-                accelerator: 'Ctrl+N',
+                accelerator: keybindings.newFile,
                 click: () => {
                     mainWindow.webContents.send('newFile')
                 }
             },
             {
                 label: 'New Folder',
-                accelerator: 'Ctrl+Shift+N',
+                accelerator: keybindings.newFolder,
                 click: () => {
                     mainWindow.webContents.send('newFolder')
                 }
             },
             {
                 label: 'Open Folder',
-                accelerator: 'Ctrl+Shift+O',
+                accelerator: keybindings.openFolder,
                 click: async () => {
                     const { filePaths } = await dialog.showOpenDialog(
                         { properties: ['openDirectory'] }
@@ -36,7 +43,7 @@ const template = [
             },
             {
                 label: 'Open File',
-                accelerator: 'Ctrl+O',
+                accelerator: keybindings.openFile,
                 click: async () => {
                     const { filePaths } = await dialog.showOpenDialog(
                         { properties: ['openFile'] }
@@ -45,10 +52,17 @@ const template = [
                     mainWindow.webContents.send('file', location)
                 }
             },
+            {
+                label: 'Open Command Prompt',
+                accelerator: keybindings.commandPrompt,
+                click: async() => {
+                    mainWindow.webContents.send('commandPrompt');
+                }
+            },
             { type: 'separator' },
             {
-                label: 'Sidebar',
-                accelerator: 'Ctrl+Shift+B',
+                label: 'Toggle Sidebar',
+                accelerator: keybindings.toggleSidebar,
                 click: () => {
                     mainWindow.webContents.send('sidebar')
                 }
@@ -56,7 +70,7 @@ const template = [
             { type: 'separator' },
             {
                 label: 'Save File',
-                accelerator: 'Ctrl+S',
+                accelerator: keybindings.saveFile,
                 click: () => {
                     mainWindow.webContents.send('save')
                 }
@@ -71,10 +85,10 @@ const template = [
 function createWindow() {
     // Create new BrowserWindow
     mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
-        minWidth: 800,
-        minHeight: 600,
+        width: win.width,
+        height: win.height,
+        minWidth: win.minWidth,
+        minHeight: win.minHeight,
         title: 'Text Editor',
         icon: 'icons/icon.png',
         webPreferences: {
@@ -98,6 +112,10 @@ function createWindow() {
 
 ipcMain.on('reload', () => {
     mainWindow.webContents.reload();
+})
+
+ipcMain.on('close', () => {
+    mainWindow.close();
 })
 
 ipcMain.on('setWindowTitle', (event, title) => {

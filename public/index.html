@@ -24,34 +24,13 @@
         <div id="editor"></div>
     </div>
 
-    <div class="newFile">
-        <form id="nw">
-            <input type="text" id="filename" placeholder="Type new file name...">
+    <div class="inputDialog">
+        <form id="dialog">
+            <input type="text" id="input" placeholder="Type the name..." dialogtype="file">
         </form>
     </div>
 
-    <div class="newFolder">
-        <form id="nwFolder">
-            <input type="text" id="foldername" placeholder="Type new file name...">
-        </form>
-    </div>
-
-    <div class="context-menu">
-        <ul>
-            <li id="rename">Rename</li>
-            <li id="delete">Delete</li>
-        </ul>
-    </div>
-
-    <div class="rename">
-        <form id="newName">
-            <input type="text" id="newfilename" placeholder="Type new file/folder name...">
-        </form>
-    </div>
-
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.13/ace.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.8.1/theme-dracula.min.js"></script>
+    <script src="./ace.min.js"></script>
     <script src="./index.js"></script>
 </body>
 

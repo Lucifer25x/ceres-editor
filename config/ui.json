@@ -1,0 +1,10 @@
+{
+    "fontFamily": "monospace",
+    "fontSize": "16px",
+    "editorTheme": "dracula",
+    "commands": {
+        "dialogExit": "exit",
+        "close": "close",
+        "reload": "reload"
+    }
+}

@@ -1,18 +1,23 @@
 const { ipcRenderer } = require('electron');
 const fs = require('fs');
 const path = require('path');
+const brace = require('brace');
+
+// Config file
+const ui = require('../config/ui.json');
+
+try {
+    require(`brace/theme/${ui.editorTheme}`);
+} catch {
+    console.log('Theme is not available.')
+}
 
 var editor = ace.edit("editor");
-editor.setTheme("ace/theme/dracula");
+editor.setTheme(`ace/theme/${ui.editorTheme}`);
 editor.setOptions({
-    fontSize: '16px'
+    fontFamily: ui.fontFamily,
+    fontSize: ui.fontSize
 })
-
-window.ondblclick = () => {
-    if (document.querySelector('.context-menu').classList.contains('visible')) {
-        document.querySelector('.context-menu').classList.remove('visible');
-    }
-}
 
 // Open Folder
 function openFolder(location) {
@@ -20,6 +25,10 @@ function openFolder(location) {
     var folderName = location.match(/([^\/]*)\/*$/)[1];
     document.getElementById('flname').textContent = folderName;
     document.querySelector('.flname').title = location;
+    document.querySelector('.flname').onclick = () => {
+        localStorage.setItem('folder', path.dirname(location));
+        openFolder(path.dirname(location));
+    }
     if (location.length != 0) {
         localStorage.setItem('folder', location);
         const content = fs.readdirSync(location);
@@ -38,37 +47,6 @@ function openFolder(location) {
                     editor.setValue(cont);
                     ipcRenderer.send('setWindowTitle', path.join(location, content[i]) + ' - Text Editor');
                 })
-                li.addEventListener('contextmenu', (e) => {
-                    e.preventDefault();
-                    document.querySelector('.context-menu').classList.add('visible');
-                    document.querySelector('.context-menu').style.top = e.clientY + 'px';
-                    document.querySelector('.context-menu').style.left = e.clientX + 'px';
-
-                    document.getElementById('rename').addEventListener('click', () => {
-                        document.querySelector('.rename').classList.add('visible');
-                        document.querySelector('.context-menu').classList.remove('visible');
-                    })
-
-                    document.getElementById('delete').addEventListener('click', () => {
-                        if (confirm('Are you sure to delete this file?')) {
-                            fs.unlinkSync(path.join(location, content[i]));
-                            localStorage.removeItem('file');
-                        }
-                        document.querySelector('.context-menu').classList.remove('visible');
-                        ipcRenderer.send('reload')
-                    })
-
-                    document.getElementById("newName").addEventListener('submit', (e) => {
-                        e.preventDefault();
-                        const newName = document.getElementById('newfilename').value;
-                        if (newName.length != 0) {
-                            fs.renameSync(path.join(location, content[i]), path.join(location, newName));
-                            localStorage.setItem('file', path.join(location, newName));
-                            document.querySelector('.rename').classList.remove('visible');
-                        }
-                        ipcRenderer.send('reload')
-                    })
-                })
                 li.title = path.join(location, content[i])
             } else {
                 const li = document.createElement('li');
@@ -80,35 +58,6 @@ function openFolder(location) {
                     localStorage.setItem('folder', path.join(location, content[i]))
                     openFolder(path.join(location, content[i]));
                 })
-                li.addEventListener('contextmenu', (e) => {
-                    e.preventDefault();
-                    document.querySelector('.context-menu').classList.add('visible');
-                    document.querySelector('.context-menu').style.top = e.clientY + 'px';
-                    document.querySelector('.context-menu').style.left = e.clientX + 'px';
-
-                    document.getElementById('rename').addEventListener('click', () => {
-                        document.querySelector('.rename').classList.add('visible');
-                        document.querySelector('.context-menu').classList.remove('visible');
-                    })
-
-                    document.getElementById('delete').addEventListener('click', () => {
-                        if (confirm('Are you sure to delete this folder?')) {
-                            fs.rmdirSync(path.join(location, content[i]));
-                        }
-                        document.querySelector('.context-menu').classList.remove('visible');
-                        ipcRenderer.send('reload')
-                    })
-
-                    document.getElementById("newName").addEventListener('submit', (e) => {
-                        e.preventDefault();
-                        const newName = document.getElementById('newfilename').value;
-                        if (newName.length != 0) {
-                            fs.renameSync(path.join(location, content[i]), path.join(location, newName));
-                            document.querySelector('.rename').classList.remove('visible');
-                        }
-                        ipcRenderer.send('reload')
-                    })
-                })
                 li.title = path.join(location, content[i])
             }
         }
@@ -116,6 +65,91 @@ function openFolder(location) {
         alert('Please select location for new file.')
     }
 }
+
+// New file, folder
+document.getElementById('dialog').onsubmit = (e) => {
+    e.preventDefault();
+    // Check folder is empty or not
+    if (localStorage.getItem('folder') != null) {
+        const input = document.getElementById('input');
+        const dialogType = input.getAttribute('dialogtype');
+        // Check filename length
+        if (input.value.length > 1) {
+            if (input.value === ui.commands.dialogExit) {
+                document.querySelector('.inputDialog').classList.remove('visible');
+            } else if (dialogType === 'command') {
+                if (input.value === ui.commands.close) {
+                    ipcRenderer.send('close');
+                } else if (input.value === ui.commands.reload) {
+                    ipcRenderer.send('reload');
+                }
+            } else {
+                // Check is file/folder exists
+                if (fs.existsSync(path.join(localStorage.getItem('folder'), input.value))) {
+                    alert('File/folder exists. Please change location or the file/folder name.')
+                } else {
+                    document.querySelector('.inputDialog').classList.remove('visible');
+                    try {
+                        if (dialogType === 'file') {
+                            fs.writeFileSync(path.join(localStorage.getItem('folder'), input.value), '');
+                            localStorage.setItem('file', path.join(localStorage.getItem('folder'), input.value));
+                            editor.setValue(' ')
+                        } else if (dialogType === 'folder') {
+                            fs.mkdirSync(path.join(localStorage.getItem('folder'), input.value))
+                        }
+                        ipcRenderer.send('reload')
+                    } catch (err) {
+                        alert("Error!");
+                        console.log(err)
+                    }
+                }
+            }
+            input.value = '';
+        } else {
+            document.querySelector('.inputDialog').classList.remove('visible');
+        }
+    } else {
+        alert('You should select location.')
+    }
+}
+
+// Add visible class to new file form
+ipcRenderer.on('newFile', () => {
+    if (localStorage.getItem('folder') != null) {
+        if (!document.querySelector('.inputDialog').classList.contains('visible')) {
+            document.querySelector('.inputDialog').classList.add('visible')
+        }
+        document.getElementById('input').setAttribute('dialogtype', 'file');
+        document.getElementById('input').focus();
+    } else {
+        alert('Please open any folder for creating new file.')
+    }
+})
+
+// Add visible class to new folder form
+ipcRenderer.on('newFolder', () => {
+    if (localStorage.getItem('folder') != null) {
+        if (!document.querySelector('.inputDialog').classList.contains('visible')) {
+            document.querySelector('.inputDialog').classList.add('visible')
+        }
+        document.getElementById('input').setAttribute('dialogtype', 'folder');
+        document.getElementById('input').focus();
+    } else {
+        alert('Please open any folder for creating new folder.')
+    }
+})
+
+ipcRenderer.on('commandPrompt', () => {
+    if (!document.querySelector('.inputDialog').classList.contains('visible')) {
+        document.querySelector('.inputDialog').classList.add('visible')
+    }
+    document.getElementById('input').setAttribute('dialogtype', 'command');
+    document.getElementById('input').focus();
+})
+
+ipcRenderer.on('openFolder', (event, location) => {
+    openFolder(location)
+})
 
 // Open File
 ipcRenderer.on('file', (event, location) => {
@@ -130,36 +164,6 @@ ipcRenderer.on('sidebar', () => {
     document.querySelector('.left').classList.toggle('unvisible');
 })
 
-// Add visible class to new file form
-ipcRenderer.on('newFile', () => {
-    if (localStorage.getItem('folder') != null) {
-        if (document.querySelector('.newFolder').classList.contains('visible')) {
-            document.querySelector('.newFolder').classList.remove('visible')
-        }
-        document.querySelector('.newFile').classList.add('visible')
-        document.getElementById('filename').focus();
-    } else {
-        alert('Please open any folder for creating new file.')
-    }
-})
-
-// Add visible class to new folder form
-ipcRenderer.on('newFolder', () => {
-    if (localStorage.getItem('folder') != null) {
-        if (document.querySelector('.newFile').classList.contains('visible')) {
-            document.querySelector('.newFile').classList.remove('visible')
-        }
-        document.querySelector('.newFolder').classList.add('visible')
-        document.getElementById('foldername').focus();
-    } else {
-        alert('Please open any folder for creating new folder.')
-    }
-})
-
-ipcRenderer.on('openFolder', (event, location) => {
-    openFolder(location)
-})
-
 // Save File
 ipcRenderer.on('save', () => {
     if (localStorage.getItem('file') != null) {
@@ -169,69 +173,13 @@ ipcRenderer.on('save', () => {
     }
 })
 
-// Create new file
-document.getElementById('nw').addEventListener('submit', (e) => {
-    e.preventDefault();
-    // Check folder is empty or not
-    if (localStorage.getItem('folder') != null) {
-        // Check filename length
-        if (document.getElementById('filename').value.length > 1) {
-            // Check file is exists or not
-            if (fs.existsSync(path.join(localStorage.getItem('folder'), document.getElementById('filename').value))) {
-                alert('File exists. Please change location or file name.')
-            } else {
-                document.querySelector('.newFile').classList.remove('visible');
-                try {
-                    fs.writeFileSync(path.join(localStorage.getItem('folder'), document.getElementById('filename').value), ' ');
-                    localStorage.setItem('file', path.join(localStorage.getItem('folder'), document.getElementById('filename').value));
-                    editor.setValue(' ')
-                    ipcRenderer.send('reload')
-                } catch (err) {
-                    alert("Error!");
-                    console.log(err)
-                }
-            }
-        } else {
-            alert('You should write valid file name.')
-        }
-    } else {
-        alert('You should select location for file.')
-    }
-})
-// Create new folder
-document.getElementById('nwFolder').addEventListener('submit', (e) => {
-    e.preventDefault();
-    // Check folder is empty or not
-    if (localStorage.getItem('folder') != null) {
-        // Check filename length
-        if (document.getElementById('foldername').value.length > 1) {
-            // Check file is exists or not
-            if (fs.existsSync(path.join(localStorage.getItem('folder'), document.getElementById('foldername').value))) {
-                alert('Folder exists. Please change location or folder name.')
-            } else {
-                document.querySelector('.newFolder').classList.remove('visible');
-                try {
-                    fs.mkdirSync(path.join(localStorage.getItem('folder'), document.getElementById('foldername').value))
-                    ipcRenderer.send('reload')
-                } catch (err) {
-                    alert("Error!");
-                    console.log(err);
-                }
-            }
-        } else {
-            alert('You should write valid folder name.')
-        }
-    } else {
-        alert('You should select location for folder.')
-    }
-})
-
 window.addEventListener('load', () => {
     // Open file automatically
     if (localStorage.getItem('file') != null) {
         if (fs.existsSync(localStorage.getItem('file'))) {
-            editor.setValue(fs.readFileSync(localStorage.getItem('file'), 'utf-8'));
-            ipcRenderer.send('setWindowTitle', localStorage.getItem('file') + ' - Text Editor');
+            const file = localStorage.getItem('file');
+            editor.setValue(fs.readFileSync(file, 'utf-8'));
+            ipcRenderer.send('setWindowTitle', file + ' - Text Editor');
         } else {
             editor.setValue('');
         }

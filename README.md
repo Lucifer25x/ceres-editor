@@ -8,13 +8,12 @@
 * Open Folder
 * Edit File
 * Save File
-* Rename File/Folder
-* Delete File/Folder
 * Create New File
 * Create New Folder
 * Get location of files and folders
 * Make Window title with file path
 * Toggle Sidebar
+* Change editor configuration, keybindings and etc. (with config file)
 
 ## Packages:
 * Electron.js
