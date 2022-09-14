@@ -1,10 +1,21 @@
 const { ipcRenderer } = require('electron');
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
 const brace = require('brace');
+const configLocations = require('../config/configLocations.json');
+let ui;
 
-// Config file
-const ui = require('../config/ui.json');
+function loadUi() {
+    let uiConfig = configLocations.ui.replace("$HOME", os.homedir);
+    if(fs.existsSync(uiConfig)){
+        ui = require(uiConfig);
+    } else {
+        ui = require('../config/ui.json');
+    }
+}
+
+loadUi();
 
 try {
     require(`brace/theme/${ui.editorTheme}`);

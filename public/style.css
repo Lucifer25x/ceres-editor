@@ -53,7 +53,6 @@
   align-items: center;
   font-weight: 500;
   color: var(--folder-name-color);
-  /* border-bottom: 1px solid rgb(184, 182, 182); */
 }
 .flname h2 {
   margin-left: 1em;

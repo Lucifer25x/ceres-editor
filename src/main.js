@@ -1,6 +1,19 @@
 const { app, BrowserWindow, Menu, dialog, ipcMain } = require('electron');
 const isDev = require('electron-is-dev');
-const keybindings = require('../config/keybindings.json');
+const path = require('path');
+const os = require('os');
+const fs = require('fs');
+const configLocations = require('../config/configLocations.json');
+let keybindings;
+
+function loadKeybindings(){
+    let keybindingConfig = configLocations.keybindings.replace("$HOME", os.homedir);
+    if(fs.existsSync(keybindingConfig)){
+        keybindings = require(keybindingConfig);
+    } else {
+        keybindings = require('../config/keybindings.json');
+    }
+}
 
 const win = {
     width: 1000,
@@ -73,6 +86,25 @@ const template = [
                 accelerator: keybindings.saveFile,
                 click: () => {
                     mainWindow.webContents.send('save')
+                }
+            }
+        ]
+    },
+    {
+        label: 'Editor',
+        submenu: [
+            {
+                label: 'Home Page',
+                accelerator: keybindings.homePage,
+                click: () => {
+                    mainWindow.loadFile(path.join(path.dirname(__dirname), 'public', 'index.html'));
+                }
+            },
+            {
+                label: 'Theme List',
+                accelerator: keybindings.themeList,
+                click: () => {
+                    mainWindow.loadFile(path.join(path.dirname(__dirname), 'public', 'themeList.html'));
                 }
             }
         ]

@@ -1,7 +1,7 @@
 {
-  "name": "simple-text-editor",
+  "name": "ceres-editor",
   "version": "1.0.1",
-  "description": "Simple Text Editor JS",
+  "description": "Ceres Text Editor",
   "main": "src/main.js",
   "scripts": {
     "start": "electron ."

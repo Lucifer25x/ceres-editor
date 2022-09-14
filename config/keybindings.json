@@ -5,5 +5,7 @@
     "openFile": "Ctrl+O",
     "toggleSidebar": "Ctrl+Shift+B",
     "saveFile": "Ctrl+S",
-    "commandPrompt": "Ctrl+Shift+P"
+    "commandPrompt": "Ctrl+Shift+P",
+    "homePage": "Ctrl+Shift+H",
+    "themeList": "Ctrl+Shift+T"
 }
