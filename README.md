@@ -15,7 +15,7 @@
 * Toggle Sidebar
 * Change editor configuration, keybindings and etc. (with config file)
 
-## Config file locations:
+## Config file locations (you can copy default confg files from github repository):
 * Ui: `$HOME/.config/ceres/ui.json`
 * Keybindings: `$HOME/.config/ceres/keybindings.json`
 
