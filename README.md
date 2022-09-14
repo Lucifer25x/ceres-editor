@@ -21,7 +21,7 @@
 * Keybindings: `$HOME/.config/ceres/keybindings.json`
 
 ### Expected features:
-* Highlight, snippets for files
+* Highlight, snippets and etc.
 * Custom editor themes
 * Extensions
 * Tabs

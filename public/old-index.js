@@ -6,9 +6,6 @@ const brace = require('brace');
 const configLocations = require('../config/configLocations.json');
 let ui;
 
-// old file path
-let oldPaths = [];
-
 function loadUi() {
     let uiConfig = configLocations.ui.replace("$HOME", os.homedir);
     if (fs.existsSync(uiConfig)) {
@@ -33,50 +30,6 @@ editor.setOptions({
     fontSize: ui.fontSize
 })
 
-// is exist in array
-function isExist(el, arr) {
-    for(let i = 0; i < arr.length; i++){
-        if(arr[i] == el){
-            return i;
-        }
-    }
-    return -1;
-}
-
-// Create tab
-function createTab(location) {
-    let index = isExist(location, oldPaths);
-    if (index == -1) {
-        const tab = document.createElement('div');
-        tab.innerText = path.basename(location);
-        tab.classList.add('tab');
-        tab.onclick = () => {
-            openFile(location)
-        }
-        if (document.querySelector('.active')) {
-            document.querySelector('.active').classList.remove('active');
-        }
-        tab.classList.add('active');
-        document.getElementById('tabs').appendChild(tab);
-        oldPaths.push(location);
-    } else {
-        const tabList = document.querySelectorAll('.tab');
-        document.querySelector('.active').classList.remove('active');
-        tabList[index].classList.add('active');
-    }
-}
-
-function openFile(location) {
-    if (fs.existsSync(location)) {
-        localStorage.setItem('file', location)
-        createTab(location);
-        editor.setValue(fs.readFileSync(location, 'utf-8'));
-        ipcRenderer.send('setWindowTitle', path.basename(location) + ' - Ceres Editor');
-    } else {
-        editor.setValue('');
-    }
-}
-
 // Open Folder
 function openFolder(location) {
     // Check user is selected any location or not
@@ -100,7 +53,10 @@ function openFolder(location) {
                 li.innerHTML = el;
                 parent.appendChild(li);
                 li.addEventListener('click', () => {
-                    openFile(path.join(location, content[i]));
+                    localStorage.setItem('file', path.join(location, content[i]));
+                    const cont = fs.readFileSync(path.join(location, content[i]), 'utf-8');
+                    editor.setValue(cont);
+                    ipcRenderer.send('setWindowTitle', path.join(location, content[i]) + ' - Text Editor');
                 })
                 li.title = path.join(location, content[i])
             } else {
@@ -230,12 +186,18 @@ ipcRenderer.on('save', () => {
 
 window.addEventListener('load', () => {
     // Open file automatically
-    if (localStorage.getItem('file')) {
-        openFile(localStorage.getItem('file'));
+    if (localStorage.getItem('file') != null) {
+        if (fs.existsSync(localStorage.getItem('file'))) {
+            const file = localStorage.getItem('file');
+            editor.setValue(fs.readFileSync(file, 'utf-8'));
+            ipcRenderer.send('setWindowTitle', file + ' - Ceres Editor');
+        } else {
+            editor.setValue('');
+        }
     }
 
     // Open folder automatically
-    if (localStorage.getItem('folder')) {
+    if (localStorage.getItem('folder') != null) {
         if (fs.existsSync(localStorage.getItem('folder'))) {
             openFolder(localStorage.getItem('folder'))
         }
