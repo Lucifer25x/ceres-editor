@@ -15,12 +15,13 @@
 * Toggle Sidebar
 * Change editor configuration, keybindings and etc. (with config file)
 
-## Config file locations (you can copy default confg files from github repository):
+## Config file locations:
+| You can copy default config files from github repository
 * Ui: `$HOME/.config/ceres/ui.json`
 * Keybindings: `$HOME/.config/ceres/keybindings.json`
 
-## Packages:
-* Electron.js
-* Node-fs
-* Node-path
-* Ace.js (brace)
+### Expected features:
+* Highlight, snippets for files
+* Custom editor themes
+* Extensions
+* Tabs
