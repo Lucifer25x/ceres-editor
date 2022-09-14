@@ -15,6 +15,8 @@ function loadKeybindings(){
     }
 }
 
+loadKeybindings();
+
 const win = {
     width: 1000,
     height: 800,
