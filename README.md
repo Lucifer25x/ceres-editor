@@ -1,4 +1,4 @@
-<h1><img src="./icons/icon.png" width=35/> Ceres Text Editor using Electron.js</h1>
+<h1><img src="./icons/icon.png" width=35/> Ceres Text Editor</h1>
 
 <br/>
 <img src="./screen.png" width=500/>

@@ -121,7 +121,7 @@ function createWindow() {
         height: win.height,
         minWidth: win.minWidth,
         minHeight: win.minHeight,
-        title: 'Text Editor',
+        title: 'Ceres Editor',
         icon: 'icons/icon.png',
         webPreferences: {
             nodeIntegration: true,
