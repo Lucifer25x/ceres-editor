@@ -2,7 +2,7 @@ const { ipcRenderer } = require('electron');
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
-const brace = require('brace');
+// const brace = require('brace');
 const configLocations = require('../config/configLocations.json');
 let ui;
 
@@ -35,8 +35,8 @@ editor.setOptions({
 
 // is exist in array
 function isExist(el, arr) {
-    for(let i = 0; i < arr.length; i++){
-        if(arr[i] == el){
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i] == el) {
             return i;
         }
     }
@@ -44,14 +44,24 @@ function isExist(el, arr) {
 }
 
 // Create tab
-function createTab(location) {
-    let index = isExist(location, oldPaths);
+function createTab(location, firstLoad) {
+    let index = firstLoad ? -1 : isExist(location, oldPaths);
     if (index == -1) {
         const tab = document.createElement('div');
         tab.innerText = path.basename(location);
         tab.classList.add('tab');
         tab.onclick = () => {
             openFile(location)
+        }
+        tab.oncontextmenu = () => {
+            oldPaths = oldPaths.filter(el => { return el != location })
+            document.getElementById('tabs').removeChild(tab);
+            if(oldPaths.length != 0 && isExist(location, oldPaths) === oldPaths.length - 2){
+                openFile(oldPaths[oldPaths.length - 1]);
+            } else if(localStorage.getItem('file') === location) {
+                localStorage.removeItem('file');
+                editor.setValue('');
+            }
         }
         if (document.querySelector('.active')) {
             document.querySelector('.active').classList.remove('active');
@@ -61,15 +71,17 @@ function createTab(location) {
         oldPaths.push(location);
     } else {
         const tabList = document.querySelectorAll('.tab');
-        document.querySelector('.active').classList.remove('active');
+        if (document.querySelector('.active')){
+            document.querySelector('.active').classList.remove('active');
+        }
         tabList[index].classList.add('active');
     }
 }
 
-function openFile(location) {
+function openFile(location, firstLoad) {
     if (fs.existsSync(location)) {
         localStorage.setItem('file', location)
-        createTab(location);
+        createTab(location, firstLoad);
         editor.setValue(fs.readFileSync(location, 'utf-8'));
         ipcRenderer.send('setWindowTitle', path.basename(location) + ' - Ceres Editor');
     } else {
@@ -81,7 +93,7 @@ function openFile(location) {
 function openFolder(location) {
     // Check user is selected any location or not
     var folderName = location.match(/([^\/]*)\/*$/)[1];
-    document.getElementById('flname').textContent = folderName;
+    document.getElementById('flname').textContent = folderName + ' ↰';
     document.querySelector('.flname').title = location;
     document.querySelector('.flname').onclick = () => {
         localStorage.setItem('folder', path.dirname(location));
@@ -231,7 +243,7 @@ ipcRenderer.on('save', () => {
 window.addEventListener('load', () => {
     // Open file automatically
     if (localStorage.getItem('file')) {
-        openFile(localStorage.getItem('file'));
+        openFile(localStorage.getItem('file'), true);
     }
 
     // Open folder automatically

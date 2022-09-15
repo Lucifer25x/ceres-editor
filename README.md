@@ -3,17 +3,11 @@
 <br/>
 <img src="./screen.png" width=500/>
 
-## Functions: 
-* Open File
-* Open Folder
-* Edit File
-* Save File
-* Create New File
-* Create New Folder
-* Get location of files and folders
-* Make Window title with file path
-* Toggle Sidebar
+## Functions:
+* Some File/Folder Operations (Open, Save, Create)
+* Sidebar (you can toggle)
 * Change editor configuration, keybindings and etc. (with config file)
+* Tabs
 
 ## Config file locations:
 | You can copy default config files from github repository
@@ -24,4 +18,3 @@
 * Highlight, snippets and etc.
 * Custom editor themes
 * Extensions
-* Tabs
