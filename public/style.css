@@ -14,6 +14,25 @@
   --tab-hover: #16161b;
 }
 
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--right-background);
+}
+
+
+::-webkit-scrollbar-thumb {
+  background: rgb(97, 96, 96);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+
 * {
   margin: 0;
   padding: 0;

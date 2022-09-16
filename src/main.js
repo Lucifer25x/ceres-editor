@@ -21,7 +21,8 @@ const win = {
     width: 1000,
     height: 800,
     minWidth: 1000,
-    minHeight: 600
+    minHeight: 600,
+    maxLines: Infinity
 }
 
 let mainWindow;

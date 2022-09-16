@@ -2,9 +2,10 @@ const { ipcRenderer } = require('electron');
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
-// const brace = require('brace');
 const configLocations = require('../config/configLocations.json');
 let ui;
+
+const getMode = require('./getMode');
 
 // old file path
 let oldPaths = [];
@@ -30,7 +31,8 @@ var editor = ace.edit("editor");
 editor.setTheme(`ace/theme/${ui.editorTheme}`);
 editor.setOptions({
     fontFamily: ui.fontFamily,
-    fontSize: ui.fontSize
+    fontSize: ui.fontSize,
+    
 })
 
 // is exist in array
@@ -81,6 +83,9 @@ function createTab(location, firstLoad) {
 function openFile(location, firstLoad) {
     if (fs.existsSync(location)) {
         localStorage.setItem('file', location)
+        const mode = getMode.getModeForPath(location).mode;
+        require(mode.replace('ace', 'brace'));
+        editor.getSession().setMode(mode);
         createTab(location, firstLoad);
         editor.setValue(fs.readFileSync(location, 'utf-8'));
         ipcRenderer.send('setWindowTitle', path.basename(location) + ' - Ceres Editor');
