@@ -1,40 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ceres Editor</title>
-    <link rel="stylesheet" href="./style.css">
-</head>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
 
-<body>
+  <body>
     <div class="main">
-        <div class="left">
-            <div class="flname">
-                <h2 id="flname">Folder Name</h2>
-            </div>
-            <div class="content">
-                <ul id="files">
-
-                </ul>
-            </div>
+      <div class="left">
+        <div class="flname">
+          <h2 id="flname">Folder Name</h2>
         </div>
-        <div class="right">
-            <div id="tabs"></div>
-            <div id="editor"></div>
+        <div class="content">
+          <ul id="files"></ul>
         </div>
+      </div>
+      <div class="right">
+        <div id="tabs"></div>
+        <div id="editor"></div>
+      </div>
     </div>
 
     <div class="inputDialog">
-        <form id="dialog">
-            <input type="text" id="input" placeholder="Type the name..." dialogtype="file">
-        </form>
+      <form id="dialog">
+        <input
+          type="text"
+          id="input"
+          placeholder="Type the name..."
+          dialogtype="file"
+        />
+      </form>
     </div>
 
     <script src="./ace.min.js"></script>
     <script src="./index.js"></script>
-</body>
-
+  </body>
 </html>
