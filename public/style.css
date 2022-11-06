@@ -23,7 +23,6 @@
   background: var(--right-background);
 }
 
-
 ::-webkit-scrollbar-thumb {
   background: rgb(97, 96, 96);
 }
@@ -31,7 +30,6 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
-
 
 * {
   margin: 0;
@@ -97,14 +95,14 @@
   color: var(--el-name-color);
   border-right: 1px solid var(--tab-right-border);
   cursor: pointer;
-  transition: .3s ease all;
+  transition: 0.3s ease all;
 }
 #tabs .tab.active {
   background: var(--tab-active-background);
 }
 #tabs .tab:hover {
   background: var(--tab-hover);
-  transition: .3s ease all;
+  transition: 0.3s ease all;
 }
 #editor {
   width: 100%;
@@ -139,7 +137,7 @@
 }
 .content ul li {
   width: 100%;
-  padding: .5em 0;
+  padding: 0.5em 0;
   display: flex;
   list-style: none;
   align-items: center;
